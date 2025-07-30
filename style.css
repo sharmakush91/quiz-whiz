@@ -61,3 +61,46 @@ h1 {
 .options:active {
   transform: scale(0.97); /* Slight press effect */
 }
+
+.question-number {
+  text-align: right;
+  margin-right: 15%;
+  color: rgb(255, 255, 255);
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.correct-answer {
+  background-color: #28a745;
+  color: #ffffff;
+  position: relative;
+  padding-left: 36px;
+  transition: background-color 0.3s ease;
+}
+
+.correct-answer::before {
+  content: "✔";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+.wrong-answer {
+  background-color: #dc3545; /* Bootstrap-style red */
+  color: #ffffff;
+  position: relative;
+  padding-left: 36px; /* space for icon */
+  transition: background-color 0.3s ease;
+}
+
+.wrong-answer::before {
+  content: "✖";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}

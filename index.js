@@ -1,3 +1,10 @@
+const questionEl = document.querySelector(".question-text");
+const optionsEl = document.querySelector(".options");
+const questionsContainer = document.querySelector(".questionsContainer");
+const answerContainer = document.querySelector(".answersContainer");
+const ansBtn = answerContainer.querySelectorAll("button");
+const questionNum = document.querySelector(".question-number");
+
 const testQuestions = [
   {
     question: "What is the capital of France?",
@@ -31,11 +38,7 @@ const testQuestions = [
   },
 ];
 
-const questionEl = document.querySelector(".question-text");
-const optionsEl = document.querySelector(".options");
-const questionsContainer = document.querySelector(".questionsContainer");
-const answerContainer = document.querySelector(".answersContainer");
-
+let question = 1;
 let currentQuestion = Math.floor(Math.random() * testQuestions.length);
 
 let curQuestion = testQuestions[currentQuestion];
@@ -46,6 +49,26 @@ curQuestion.options.forEach((option) => {
   const btn = document.createElement("button");
   btn.classList.add("options");
   btn.textContent = option;
+  questionNum.textContent = `Question ${question} / 10`;
 
   answerContainer.append(btn);
+});
+
+//Click function for correct and wrong answer
+
+answerContainer.addEventListener("click", function (e) {
+  question++;
+  questionNum.textContent = `Question ${question} / 10`;
+  if (
+    e.target.classList.contains("options") &&
+    e.target.textContent === curQuestion.answer
+  ) {
+    console.log("click");
+    e.target.classList.add("correct-answer");
+  } else if (
+    e.target.classList.contains("options") &&
+    e.target.textContent !== curQuestion.answer
+  ) {
+    e.target.classList.add("wrong-answer");
+  }
 });
