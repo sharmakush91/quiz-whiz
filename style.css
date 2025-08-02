@@ -104,3 +104,16 @@ h1 {
   transform: translateY(-50%);
   font-size: 18px;
 }
+
+.quizComplete {
+  background-color: #000000;
+  width: 20%;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 200px auto; /* ✅ This centers it horizontally */
+  border-radius: 20px;
+  border: 3px solid rgb(255, 255, 255);
+  box-shadow: 0 0 12px 4px rgba(231, 84, 128, 0.7);
+}
