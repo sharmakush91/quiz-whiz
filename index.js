@@ -6,6 +6,7 @@ const ansBtn = answerContainer.querySelectorAll("button");
 const questionNum = document.querySelector(".question-number");
 
 let testQuestions = [];
+let correctAnswers = [];
 
 let question = 0;
 let currentQuestion = 0;
@@ -18,6 +19,7 @@ let curQuestion;
 //Loop through options for answer buttons
 
 function btnCreate() {
+  answerContainer.textContent = "";
   curQuestion.options.forEach((option) => {
     let btn = document.createElement("button");
     btn.classList.add("options");
@@ -37,8 +39,8 @@ function setTimeOut() {
 
     if (currentQuestion >= testQuestions.length) {
       // Quiz complete, no more questions
+      questionEl.textContent = `Your Total score is ${correctAnswers.length} / 10`;
       answerContainer.textContent = "";
-      questionsContainer.textContent = "";
       questionsContainer.classList.remove("questionsContainer");
       questionsContainer.classList.add("quizComplete");
 
@@ -46,11 +48,11 @@ function setTimeOut() {
     }
 
     curQuestion = testQuestions[currentQuestion];
-    questionEl.textContent = curQuestion.question;
     answerContainer.textContent = "";
+    questionEl.textContent = curQuestion.question;
     btnCreate();
     clickLock = false;
-  }, 500);
+  }, 1200);
 }
 
 //Click function for correct and wrong answer
@@ -59,19 +61,14 @@ let clickLock = false;
 answerContainer.addEventListener("click", function (e) {
   if (clickLock) return;
 
-  if (question >= 10) {
-    answerContainer.textContent = "";
-    questionsContainer.textContent = "";
-    console.log("quiz complete");
-    return;
-  }
-
   //Handle click on options
   if (
     e.target.classList.contains("options") &&
     e.target.textContent === curQuestion.answer
   ) {
     e.target.classList.add("correct-answer");
+    correctAnswers.push(curQuestion.answer);
+    console.log(correctAnswers);
     clickLock = true;
     question++;
     setTimeOut(); //SetTimeOut function called
@@ -80,6 +77,14 @@ answerContainer.addEventListener("click", function (e) {
     e.target.textContent !== curQuestion.answer
   ) {
     e.target.classList.add("wrong-answer");
+
+    //Display the actual correct answer
+    const curBtn = document.querySelectorAll("button");
+    curBtn.forEach((btn) => {
+      if (btn.textContent === curQuestion.answer) {
+        btn.classList.add("correct-answer");
+      }
+    });
     clickLock = true;
     question++;
     setTimeOut(); //SetTimeOut function called
@@ -109,11 +114,9 @@ const quizApi = fetch(
 
 quizApi
   .then((response) => {
-    console.log("Raw Response object:", response);
     return response.json();
   })
   .then((data) => {
-    console.log(data);
     testQuestions = data.results.map((q) => ({
       question: decodeHtml(q.question),
       answer: decodeHtml(q.correct_answer),
