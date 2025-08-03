@@ -38,7 +38,7 @@ function nextQuestion() {
     questionEl.textContent = curQuestion.question;
     btnCreate();
     clickLock = false;
-  }, 1200);
+  }, 1600);
 }
 
 // Click function for correct and wrong answers
