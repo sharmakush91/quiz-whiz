@@ -8,7 +8,6 @@ const questionNum = document.querySelector(".question-number");
 let testQuestions = [];
 let correctAnswers = [];
 
-let question = 0;
 let currentQuestion = 0;
 
 //Select question from object
@@ -24,29 +23,16 @@ function btnCreate() {
     let btn = document.createElement("button");
     btn.classList.add("options");
     btn.textContent = option;
-    if (question < 10) {
-      questionNum.textContent = `Question ${question + 1} / 10`;
+    if (currentQuestion < 10) {
+      questionNum.textContent = `Question ${currentQuestion + 1} / 10`;
     }
     answerContainer.append(btn);
   });
 }
 
-//SetTimeOut Function
-
-function setTimeOut() {
+//Next question function
+function nextQuestion() {
   setTimeout(() => {
-    currentQuestion++;
-
-    if (currentQuestion >= testQuestions.length) {
-      // Quiz complete, no more questions
-      questionEl.textContent = `Your Total score is ${correctAnswers.length} / 10`;
-      answerContainer.textContent = "";
-      questionsContainer.classList.remove("questionsContainer");
-      questionsContainer.classList.add("quizComplete");
-
-      return; // stop here
-    }
-
     curQuestion = testQuestions[currentQuestion];
     answerContainer.textContent = "";
     questionEl.textContent = curQuestion.question;
@@ -55,30 +41,29 @@ function setTimeOut() {
   }, 1200);
 }
 
-//Click function for correct and wrong answer
+// Click function for correct and wrong answers
 let clickLock = false;
 
 answerContainer.addEventListener("click", function (e) {
   if (clickLock) return;
 
-  //Handle click on options
+  // If correct
   if (
     e.target.classList.contains("options") &&
     e.target.textContent === curQuestion.answer
   ) {
     e.target.classList.add("correct-answer");
     correctAnswers.push(curQuestion.answer);
-    console.log(correctAnswers);
     clickLock = true;
-    question++;
-    setTimeOut(); //SetTimeOut function called
+    currentQuestion++;
+
+    // If wrong
   } else if (
     e.target.classList.contains("options") &&
     e.target.textContent !== curQuestion.answer
   ) {
     e.target.classList.add("wrong-answer");
 
-    //Display the actual correct answer
     const curBtn = document.querySelectorAll("button");
     curBtn.forEach((btn) => {
       if (btn.textContent === curQuestion.answer) {
@@ -86,13 +71,37 @@ answerContainer.addEventListener("click", function (e) {
       }
     });
     clickLock = true;
-    question++;
-    setTimeOut(); //SetTimeOut function called
+    currentQuestion++;
+  } else {
+    return;
   }
+
+  // Check if quiz is complete
+  if (currentQuestion >= testQuestions.length) {
+    setTimeout(() => {
+      questionEl.textContent = `Your Total score is ${correctAnswers.length} / 10`;
+      answerContainer.textContent = "";
+      questionsContainer.classList.remove("questionsContainer");
+      questionsContainer.classList.add("quizComplete");
+
+      //Restart Quiz
+      const startAgainBtn = document.createElement("button");
+      startAgainBtn.textContent = "Restart";
+      startAgainBtn.classList.add("restart-button");
+      answerContainer.append(startAgainBtn);
+      startAgainBtn.addEventListener("click", function () {
+        location.reload(); // restart logic
+      });
+    }, 1200);
+    return;
+  }
+
+  // Otherwise go to next question
+  nextQuestion();
 });
 
+// Simple Fisher-Yates shuffle
 function shuffleArray(arr) {
-  // Simple Fisher-Yates shuffle
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];

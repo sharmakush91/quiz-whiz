@@ -141,6 +141,27 @@ h1 {
   animation: popIn 0.5s ease-out;
 }
 
+.restart-button {
+  background-color: #e75480;
+  color: white;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(231, 84, 128, 0.6);
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.restart-button:hover {
+  background-color: #fd94b7;
+}
+
+.restart-button:active {
+  transform: scale(0.95);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .answersContainer {
@@ -160,7 +181,7 @@ h1 {
 
   .question-text,
   .question-number {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .options {
@@ -178,5 +199,20 @@ h1 {
 
   h1 {
     font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .restart-button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 300px;
+    display: flex; /* added */
+    justify-content: center; /* added */
+    align-items: center; /* added */
+    margin: 0 auto;
+    text-align: center; /* keep it, no harm */
   }
 }
