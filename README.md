@@ -1,4 +1,4 @@
-# Quiz Whiz 🎯
+# Quiz Whiz 
 
 **Quiz Whiz** is a simple, interactive front-end quiz app built using HTML, CSS, and JavaScript. It pulls questions from the [Open Trivia Database API](https://opentdb.com/) and lets users test their general knowledge through multiple-choice questions.
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 🧠 Features
+## Features
 
 - Fetches 10 random multiple-choice questions from an external API.
 - Shuffles answer options for each question.
@@ -16,7 +16,7 @@
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **HTML**
 - **CSS**
@@ -26,7 +26,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 To run this project locally:
 
