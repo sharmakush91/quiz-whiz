@@ -13,24 +13,29 @@ let currentQuestion = 0;
 //Select question from object
 let curQuestion;
 
-//Add text content
+//Clicklock flag
+let clickLock = false;
 
-//Loop through options for answer buttons
-
+//Button create function
 function btnCreate() {
   answerContainer.textContent = "";
   curQuestion.options.forEach((option) => {
     let btn = document.createElement("button");
     btn.classList.add("options");
     btn.textContent = option;
-    if (currentQuestion < 10) {
-      questionNum.textContent = `Question ${currentQuestion + 1} / 10`;
-    }
     answerContainer.append(btn);
+    questionDisplay();
   });
 }
 
-//Next question function
+//Display question number Function
+function questionDisplay() {
+  if (currentQuestion < 10) {
+    questionNum.textContent = `Question ${currentQuestion + 1} / 10`;
+  }
+}
+
+//Next question Function
 function nextQuestion() {
   setTimeout(() => {
     curQuestion = testQuestions[currentQuestion];
@@ -38,44 +43,45 @@ function nextQuestion() {
     questionEl.textContent = curQuestion.question;
     btnCreate();
     clickLock = false;
-  }, 1600);
+  }, 2000);
 }
 
-// Click function for correct and wrong answers
-let clickLock = false;
-
-answerContainer.addEventListener("click", function (e) {
+//Display answer Function
+function displayAnswer(e) {
   if (clickLock) return;
 
-  // If correct
   if (
     e.target.classList.contains("options") &&
     e.target.textContent === curQuestion.answer
   ) {
+    // Correct answer
     e.target.classList.add("correct-answer");
     correctAnswers.push(curQuestion.answer);
     clickLock = true;
     currentQuestion++;
-
-    // If wrong
   } else if (
     e.target.classList.contains("options") &&
     e.target.textContent !== curQuestion.answer
   ) {
+    // Wrong answer
     e.target.classList.add("wrong-answer");
 
-    const curBtn = document.querySelectorAll("button");
+    const curBtn = document.querySelectorAll("button.options");
     curBtn.forEach((btn) => {
       if (btn.textContent === curQuestion.answer) {
         btn.classList.add("correct-answer");
       }
     });
+
     clickLock = true;
     currentQuestion++;
   } else {
     return;
   }
+}
 
+//Quiz complete function
+function quizCompleteCheck() {
   // Check if quiz is complete
   if (currentQuestion >= testQuestions.length) {
     setTimeout(() => {
@@ -83,22 +89,24 @@ answerContainer.addEventListener("click", function (e) {
       answerContainer.textContent = "";
       questionsContainer.classList.remove("questionsContainer");
       questionsContainer.classList.add("quizComplete");
-
-      //Restart Quiz
-      const startAgainBtn = document.createElement("button");
-      startAgainBtn.textContent = "Restart";
-      startAgainBtn.classList.add("restart-button");
-      answerContainer.append(startAgainBtn);
-      startAgainBtn.addEventListener("click", function () {
-        location.reload(); // restart logic
-      });
+      restartQuiz();
     }, 1200);
     return;
   }
+}
 
-  // Otherwise go to next question
-  nextQuestion();
-});
+//Restart quiz Function
+
+function restartQuiz() {
+  //Restart Quiz
+  const startAgainBtn = document.createElement("button");
+  startAgainBtn.textContent = "Restart";
+  startAgainBtn.classList.add("restart-button");
+  answerContainer.append(startAgainBtn);
+  startAgainBtn.addEventListener("click", function () {
+    location.reload(); // restart logic
+  });
+}
 
 // Simple Fisher-Yates shuffle
 function shuffleArray(arr) {
@@ -116,6 +124,18 @@ function decodeHtml(html) {
   txt.innerHTML = html;
   return txt.value;
 }
+
+answerContainer.addEventListener("click", function (e) {
+  displayAnswer(e);
+  //check if quiz is complete
+  quizCompleteCheck();
+  // Otherwise go to next question
+  if (currentQuestion < testQuestions.length) {
+    nextQuestion();
+  }
+});
+
+//Quiz API fetch function
 
 const quizApi = fetch(
   "https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple"
